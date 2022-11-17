@@ -1,0 +1,26 @@
+.home_page {
+    padding: 10px;
+
+    .home_map {
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1px solid #ccc;
+        box-shadow: 1px 1px 12px rgb(0, 0, 0, 0.17);
+    }
+
+    .home_chart {
+        border: 1px solid #ccc;
+        // height: 100%;
+        height: 500px;
+        border-radius: 10px;
+        box-shadow: 1px 1px 12px rgb(0, 0, 0, 0.17);
+    }
+
+    .home_chart_date {
+        border: 1px solid #ccc;
+        padding : 10px ;
+        // height: 100%;
+        border-radius: 10px;
+        box-shadow: 1px 1px 12px rgb(0, 0, 0, 0.17);
+    }
+}

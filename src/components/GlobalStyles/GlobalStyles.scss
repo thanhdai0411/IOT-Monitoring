@@ -1,0 +1,50 @@
+// @import 'normalize.css';
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+:root {
+    --default-height-header: 60px;
+    --default-width-content: 1150px;
+    --primary-color: #088f81;
+    --auth-page-color: #5CB8E4;
+    --side-color : #12344d;
+    --side-icon-color : #dbdedf;
+    --side-icon-hover-color : #5a7183;
+    --body-color : #f6f6f7;
+
+    --state-sensor-normal  :#11cc67 ; 
+    --state-sensor-calib  :orange ; 
+    --state-sensor-error  :red ; 
+    --state-sensor-off  :gray ; 
+
+    --sate-device-off: gray ; 
+    --sate-device-on: #11cc67 ; 
+    
+
+
+
+
+}
+::selection {
+    color: white;
+    background: var(--primary-color);
+}
+
+// html {
+//     font-size: 62.5%;
+// }
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    background-color: var(--body-color) !important;
+    // padding: 0;
+    // font-size: 1.6rem;
+    // line-height: 1.5;
+    // text-rendering: optimizeSpeed;
+}
