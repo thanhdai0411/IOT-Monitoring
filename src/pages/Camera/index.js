@@ -1,7 +1,7 @@
 import React from 'react';
-
+import Nothing from '../../components/Nothing';
 function Camera() {
-    return <div>Camera</div>;
+    return <Nothing />;
 }
 
 export default Camera;

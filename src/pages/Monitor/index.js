@@ -7,7 +7,7 @@ import './Monitor.scss';
 import { getDatabase, onValue, ref } from 'firebase/database';
 
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import { Button, Grid } from '@mui/material';
+import { Autocomplete, Button, Grid, TextField } from '@mui/material';
 
 import Loading from '../../components/Loading';
 import MySelect from '../../components/MySelect';
@@ -99,6 +99,9 @@ const TIME_DEVICE_OFF = 30;
 function Monitor() {
     const [dataChange, setDataChange] = useState(false);
     const dispatch = useDispatch();
+    const [valueSelect, setValueSelect] = useState('');
+    const [menuValue, setMenuSelect] = useState([]);
+    const [detailMonitor, setDetailMonitor] = useState(null);
 
     // handle data realtime
     const db = getDatabase();
@@ -108,16 +111,18 @@ function Monitor() {
     const listDevice = JSON.parse(deviceUser);
 
     let devices = [];
-
-    if (listDevice) {
-        const id = Object.keys(listDevice);
-        id.map((v) => {
-            devices.push({
-                id: v,
-                full_name: listDevice[v]['FullName'],
+    useEffect(() => {
+        if (listDevice) {
+            const id = Object.keys(listDevice);
+            id.map((v) => {
+                devices.push({
+                    id: v,
+                    label: listDevice[v]['FullName'],
+                });
             });
-        });
-    }
+        }
+        setMenuSelect(devices);
+    }, []);
 
     // get data
     useEffect(() => {
@@ -139,7 +144,7 @@ function Monitor() {
                     data_sensor: RS485Data,
                     location: Location,
                     last_time: lastTime,
-                    full_name: v.full_name,
+                    full_name: v.label,
                     status_station: timeC < timeP || compare === 1 ? `OFF*${'NOOK'}` : `ON*${'0'}`,
                 });
                 setDataChange({
@@ -198,6 +203,17 @@ function Monitor() {
         rows = dataForTable;
     }
     console.log({ rows });
+
+    const handleOnChangeSelectStation = (e, v) => {
+        console.log(v);
+        if (v !== null) {
+            setValueSelect(v);
+            let result = rows.filter((v2) => v2.id_station == v.id);
+            console.log({ result });
+            setDetailMonitor(result);
+        }
+    };
+
     // style for state sensor
     const styleStateValue = (value) => {
         let stateSensor = value.split('*')[1];
@@ -222,6 +238,11 @@ function Monitor() {
         };
     };
 
+    const handleMonitorAll = () => {
+        setDetailMonitor(null);
+        setValueSelect('');
+    };
+
     return (
         <>
             {arr.current && arr.current.length > 0 ? (
@@ -231,7 +252,7 @@ function Monitor() {
                         {/* <SubHeader text={'GIÁM SÁT TRỰC TUYẾN TRẠM NƯỚC THẢI'} /> */}
                         <div className="monitor_page-select">
                             <Grid container spacing={2}>
-                                <Grid item xs={2}>
+                                {/* <Grid item xs={2}>
                                     <MySelect label="Chọn Tỉnh" />
                                 </Grid>
                                 <Grid item xs={2}>
@@ -242,14 +263,27 @@ function Monitor() {
                                 </Grid>
                                 <Grid item xs={3}>
                                     <MySelect label="Chọn Mức Cảnh Báo" />
+                                </Grid> */}
+                                <Grid item xs={6}>
+                                    <Autocomplete
+                                        id="controllable-states-demo"
+                                        size="small"
+                                        color="success"
+                                        onChange={handleOnChangeSelectStation}
+                                        options={menuValue}
+                                        value={valueSelect.label}
+                                        renderInput={(params) => (
+                                            <TextField {...params} label="Chọn trạm giám sát" />
+                                        )}
+                                    />
                                 </Grid>
                                 <Grid item xs={2}>
                                     <Button
                                         variant="contained"
                                         style={{ backgroundColor: '#088f81' }}
                                         fullWidth
-                                        startIcon={<SearchOutlinedIcon />}>
-                                        Tìm kiếm
+                                        onClick={handleMonitorAll}>
+                                        GIÁM SÁT TẤT CẢ
                                     </Button>
                                 </Grid>
                             </Grid>
@@ -258,7 +292,7 @@ function Monitor() {
                             <>
                                 <MyTable
                                     columns={columns}
-                                    rows={rows}
+                                    rows={detailMonitor ? detailMonitor : rows}
                                     styleStateValue={styleStateValue}
                                 />
                             </>

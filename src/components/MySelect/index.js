@@ -11,9 +11,9 @@ import { IndeterminateCheckBoxOutlined } from '@mui/icons-material';
 export default function MySelect({
     label = 'Label',
     menuValue = [
-        { id: 1, name: 'Value 1' },
-        { id: 2, name: 'Value 1' },
-        { id: 3, name: 'Value 1' },
+        { id: 1, label: 'Value 1' },
+        { id: 2, label: 'Value 1' },
+        { id: 3, label: 'Value 1' },
     ],
     defaultValue,
     defaultChecked,
@@ -45,7 +45,7 @@ export default function MySelect({
                     onChange={onChange}>
                     {menuValue.map((v, index) => (
                         <MenuItem value={v.id} key={v.id}>
-                            {v.name}
+                            {v.label}
                         </MenuItem>
                     ))}
                 </Select>

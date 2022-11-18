@@ -1,13 +1,14 @@
 import React, { Fragment, useId } from 'react';
-import { BrowserRouter as Router, Routes, Route, Redirect } from 'react-router-dom';
-import { publicRoutes, privateRoutes } from './routes';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import DefaultLayout from './components/Layout/DefaultLayout';
-import ProtectedRoute from './routes/ProtectedRoute';
+import { privateRoutes, publicRoutes } from './routes';
 
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ProtectedRoute from './routes/ProtectedRoute';
 function App() {
     const id = useId();
+
     return (
         <Router>
             <ToastContainer />

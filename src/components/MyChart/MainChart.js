@@ -47,7 +47,7 @@ function MainChart({ endDate, startDate, deviceUser }) {
     ) => {
         // const startDateChoose = '13:00 11/11/2022'; // time MM/DD/YYYY
         // const endDateChoose = '13:00 12/11/2022';
-        console.log({ idStation, nameSensor, startDateChoose, endDateChoose });
+        // console.log({ idStation, nameSensor, startDateChoose, endDateChoose });
 
         const dateS = new Date(startDateChoose);
         const dateE = new Date(endDateChoose);
@@ -103,7 +103,7 @@ function MainChart({ endDate, startDate, deviceUser }) {
                     RS485Data.map((v) => {
                         s.push(v.Name);
                     });
-                    console.log({ s });
+                    // console.log({ s });
                     setListSensor(s);
                     s.forEach((s) => {
                         getDataOfSensorRealtime(deviceUser, s, startDate, endDate);
@@ -117,7 +117,7 @@ function MainChart({ endDate, startDate, deviceUser }) {
             });
     }, [startDate, endDate, deviceUser]);
 
-    console.log({ count: countGet, leng: listSensor.length });
+    // console.log({ count: countGet, leng: listSensor.length });
 
     let output = [];
     if (countGet === listSensor.length) {
@@ -181,8 +181,8 @@ function MainChart({ endDate, startDate, deviceUser }) {
             {endDataForChart.length > 0 ? (
                 <ResponsiveContainer width="100%" height="100%">
                     <LineChart
-                        width={500}
-                        height={500}
+                        width={1000}
+                        height={1000}
                         style={{ minHeight: '500px' }}
                         data={endDataForChart}
                         margin={{
@@ -201,7 +201,7 @@ function MainChart({ endDate, startDate, deviceUser }) {
                             <Line
                                 key={index}
                                 type="linear"
-                                strokeWidth={2}
+                                strokeWidth={1.5}
                                 dataKey={v}
                                 stroke={COLOR[index]}
                                 dot={{ r: 1 }}
@@ -211,7 +211,23 @@ function MainChart({ endDate, startDate, deviceUser }) {
                     </LineChart>
                 </ResponsiveContainer>
             ) : (
-                <Skeleton animation="wave" variant="rounded" height={500} width={'100%'}></Skeleton>
+                <div style={{ position: 'relative' }}>
+                    <Skeleton animation="wave" variant="rounded" height={500} width={'100%'} />
+                    <p
+                        style={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '0',
+                            right: '0',
+                            textAlign: 'center',
+                        }}>
+                        <span style={{ fontSize: '18px', marginBottom: '10px', fontWeight: '600' }}>
+                            Vui lòng chờ...
+                        </span>{' '}
+                        <br />
+                        Trường hợp không hiện thị <br /> xin vui lòng chọn lại trạm giám sát
+                    </p>
+                </div>
             )}
         </>
     );

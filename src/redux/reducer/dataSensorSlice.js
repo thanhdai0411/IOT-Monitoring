@@ -1,33 +1,31 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    data_sensor: [],
-    sensor_name: [],
+    data_chart: [],
+    list_sensor: [],
 };
 
 export const dataSensorSlice = createSlice({
     name: 'data',
     initialState,
     reducers: {
-        dataSensorRealTime: (state, action) => {
-            // console.log({ state, action: action.payload });
-            state.data_sensor = action.payload;
+        dataChartDetail: (state, action) => {
+            state.data_chart = action.payload;
         },
-        getSensorName: (state, action) => {
-            console.log({ action: action.payload });
-            state.sensor_name = action.payload;
+        listSensorOfStation: (state, action) => {
+            state.list_sensor = action.payload;
         },
     },
 });
 
 //action
-export const { dataSensorRealTime, getSensorName } = dataSensorSlice.actions;
+export const { dataChartDetail, listSensorOfStation } = dataSensorSlice.actions;
 
 //reducer
 const dataSensorSliceReducer = dataSensorSlice.reducer;
 
 //selector
-export const dataSensorSelector = (state) => state.dataSensorSliceReducer.data_sensor;
-export const sensorNameSelector = (state) => state.dataSensorSliceReducer.sensor_name;
+export const dataChartSelector = (state) => state.dataSensorSliceReducer.data_chart;
+export const listSensorStationSelector = (state) => state.dataSensorSliceReducer.list_sensor;
 
 export default dataSensorSliceReducer;

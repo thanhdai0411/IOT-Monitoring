@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-import { Grid, Button, LinearProgress } from '@mui/material';
+import { Grid, Button, LinearProgress, Autocomplete, TextField } from '@mui/material';
 
 import SubHeader from '../../components/SubHeader';
 import MySelect from '../../components/MySelect';
@@ -13,9 +14,10 @@ import moment from 'moment';
 import { httpsCallable } from 'firebase/functions';
 import { functions } from '../../config/firebase';
 import MyTable from '../../components/MyTable';
-import { sensorNameSelector } from '../../redux/reducer/dataSensorSlice';
+import { dataChartDetail, listSensorOfStation } from '../../redux/reducer/dataSensorSlice';
 import { getDatabase, onValue, ref, child, get } from 'firebase/database';
-
+import StackedLineChartIcon from '@mui/icons-material/StackedLineChart';
+import Toast from '../../utils/toasts';
 const columns = [
     { id: 'stt', label: '#', align: 'center', minWidth: 50 },
 
@@ -96,13 +98,12 @@ function Search() {
     const [lengSensor, setLengSensor] = useState(0);
     const [loadingSearch, setLoadingSearch] = useState(false);
 
-    const [stationIdTemp, setStationIdTemp] = useState('');
-    const [startDateTemp, setStartDateTemp] = useState(
-        moment(new Date()).format('00:00 MM/DD/YYYY')
-    );
-    const [endDateTemp, setEndDateTemp] = useState(moment(new Date()).format('HH:mm MM/DD/YYYY'));
+    const [valueSelect, setValueSelect] = useState('');
 
-    let sensorName = localStorage.getItem('sensor').split(',');
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    // let sensorName = localStorage.getItem('sensor').split(',');
 
     const db = ref(getDatabase());
 
@@ -132,7 +133,7 @@ function Search() {
             id.map((v) => {
                 devices.push({
                     id: v,
-                    name: listDevice[v]['FullName'],
+                    label: listDevice[v]['FullName'],
                 });
             });
         }
@@ -179,9 +180,6 @@ function Search() {
 
                 // count.current = count.current + 1;
 
-                if (nameSensor === endSensor) {
-                    setEndGetSensor(true);
-                }
                 dataSensorGet.Detail.forEach((v) => {
                     let obj = {
                         value: { name: nameSensor, val: v.avg_value },
@@ -202,9 +200,8 @@ function Search() {
 
     // const watchData = () => {
     let output = [];
-    if (countGet === lengSensor) {
+    if (countGet === lengSensor.length) {
         const handleObjectSameKeyInArr = (arr) => {
-            console.log({ arr });
             arr.forEach(function (item) {
                 var existing = output.filter(function (v, i) {
                     return v.time == item.time;
@@ -216,7 +213,8 @@ function Search() {
                 } else {
                     let arr = [];
                     arr.push(item.value);
-                    if (typeof item.value == 'object') {
+                    let type = typeof item.value;
+                    if (type == 'object') {
                         item.value = arr;
                     }
                     // console.log(item);
@@ -261,9 +259,18 @@ function Search() {
             endDataForChart = mergeItemObjectArrToObject(output);
         }
     }
+
     const handleClickSearch = () => {
+        if (!valueSelect) {
+            Toast('error', 'Vui lòng chọn trạm để tra cứu', 2000);
+            return;
+        }
+        if (endDataForChart.length > 0) {
+            Toast('warning', 'Dữ liệu đã tìm thấy', 2000);
+            return;
+        }
+
         setCountGet(0);
-        // setEndGetSensor(false);
         setDataSensorRange([]);
         setLoadingSearch(true);
         get(child(db, `Devices/DAIVIET-RS485/${stationId}`))
@@ -290,7 +297,7 @@ function Search() {
                     });
 
                     setListSensor(tb);
-                    setLengSensor(s.length);
+                    setLengSensor(s);
 
                     let endSensor = s[s.length - 1];
                     s.forEach((s) => {
@@ -303,6 +310,16 @@ function Search() {
             .catch((error) => {
                 console.error(error);
             });
+    };
+
+    const handleClickChart = () => {
+        if (!valueSelect) {
+            Toast('error', 'Vui lòng chọn trạm để tra cứu', 2000);
+            return;
+        }
+        navigate(`/search/chart/${valueSelect.label}`);
+        dispatch(dataChartDetail(endDataForChart));
+        dispatch(listSensorOfStation(lengSensor));
     };
 
     const styleStateValue = (value) => {
@@ -328,62 +345,63 @@ function Search() {
         };
     };
 
+    const handleOnChangeSelectStation = (e, v) => {
+        if (v !== null) {
+            setValueSelect(v);
+            setStationId(v.id);
+        }
+    };
+
     return (
         <div className="search_page">
             <SubHeader text={'TRA CỨU DỮ LIỆU'} />
             {/* <SubHeader text={'GIÁM SÁT TRỰC TUYẾN TRẠM NƯỚC THẢI'} /> */}
             <div className="monitor_page-select">
-                <Grid container spacing={2}>
-                    {/* <Grid item xs={3}>
-                        <MySelect
-                            label="Tra cứu dữ liệu"
-                            defaultValue="Giờ"
-                            defaultOpen="Giờ"
-                            onChange={handleOnChangeSelect}
-                            defaultChecked="Giờ"
-                            menuValue={[
-                                { id: 'MIN', name: 'Theo Phút' },
-                                { id: 'HOUR', name: 'Theo Giờ' },
-                                { id: 'DAY', name: 'Theo Ngày' },
-                                { id: 'MONTH', name: 'Theo Tháng' },
-                            ]}
-                        />
-                    </Grid> */}
-                    {/* <Grid item xs={3}>
-                        <MySelect label="Chọn Tỉnh" />
-                    </Grid> */}
-                    {/* <Grid item xs={3}>
-                        <MySelect label="Chọn Vùng" />
-                    </Grid> */}
+                <Grid container spacing={1}>
                     <Grid item xs={3}>
-                        <MySelect
-                            label="Chọn Trạm"
-                            menuValue={menuValue}
-                            onChange={handleOnChangeSelect}
+                        <Autocomplete
+                            id="controllable-states-demo"
+                            size="small"
+                            color="success"
+                            onChange={handleOnChangeSelectStation}
+                            options={menuValue}
+                            value={valueSelect.label || null}
+                            renderInput={(params) => (
+                                <TextField {...params} label="Chọn trạm tra cứu" />
+                            )}
                         />
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={2.5}>
                         <MyDateRange
                             label={'Bắt đầu'}
                             onChange={handleChangeStartDate}
                             value={startDate}
                         />
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={2.5}>
                         <MyDateRange
                             label={'Kết thúc'}
                             onChange={handleChangeEndDate}
                             value={endDate}
                         />
                     </Grid>
-                    {/* <Grid item xs={3}>
-                        <MySelect label="Chọn Mức Cảnh Báo" />
-                    </Grid> */}
-                    <Grid item xs={3}>
+                    <Grid item xs={2}>
+                        <Button
+                            variant="contained"
+                            style={{ backgroundColor: 'orange' }}
+                            fullWidth
+                            onClick={handleClickChart}
+                            disabled={endDataForChart.length ? false : true}
+                            startIcon={<StackedLineChartIcon />}>
+                            Biểu đồ
+                        </Button>
+                    </Grid>
+                    <Grid item xs={2}>
                         <Button
                             variant="contained"
                             style={{ backgroundColor: '#088f81' }}
                             fullWidth
+                            // disabled={dbBtnSearch ? true : false}
                             onClick={handleClickSearch}
                             startIcon={<SearchOutlinedIcon />}>
                             Tìm kiếm
@@ -399,11 +417,19 @@ function Search() {
                         styleStateValue={styleStateValue}
                     />
                 ) : (
-                    <p style={{ textAlign: 'center', fontSize: '20px' }}>
+                    <p
+                        style={{
+                            textAlign: 'center',
+                            fontSize: '18px',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            height: '40vh',
+                        }}>
                         {loadingSearch ? (
-                            <span>Tiến hành tìm kiếm</span>
+                            <span>Đang tiến hành tìm kiếm</span>
                         ) : (
-                            <span>Chưa tìm kiếm dữ liệu hoặc dữ liệu không có</span>
+                            <span>Chưa có dữ liệu</span>
                         )}
                     </p>
                 )}

@@ -86,7 +86,7 @@ const itemSideBar = [
     { id: 6, m: 'Camera', im: <VideocamOutlinedIcon />, l: '/camera' },
     { id: 7, m: 'Nhật ký', im: <HistoryOutlinedIcon />, l: '/history' },
 ];
-function Sidebar() {
+function HeaderOnly() {
     const [open, setOpen] = useState(false);
     const navigate = useNavigate();
 
@@ -123,73 +123,8 @@ function Sidebar() {
             {/* <CssBaseline /> */}
 
             <Header handleOpenSidebar={handleOpenSidebar} />
-
-            <Drawer variant="permanent" open={open}>
-                <div className="side_bar">
-                    <DrawerHeader></DrawerHeader>
-                    <List className="side_bar-list">
-                        <div style={{ flex: 1 }}>
-                            {itemSideBar.map((v, index) => (
-                                <ListItem key={index} disablePadding sx={{ display: 'block' }}>
-                                    <Link
-                                        to={v.l}
-                                        style={{ textDecoration: 'none', color: 'black' }}>
-                                        <ListItemButton
-                                            onClick={() => handleClickItemBar(v.id)}
-                                            sx={{
-                                                minHeight: 48,
-                                                justifyContent: open ? 'initial' : 'center',
-                                                px: 2.5,
-                                            }}>
-                                            <ListItemIcon
-                                                className="side_icon"
-                                                sx={{
-                                                    minWidth: 0,
-                                                    mr: open ? 3 : 'auto',
-                                                    justifyContent: 'center',
-                                                }}>
-                                                {v.im}
-                                            </ListItemIcon>
-                                            <ListItemText
-                                                className="side_text"
-                                                primary={v.m}
-                                                sx={{ opacity: open ? 1 : 0 }}
-                                            />
-                                        </ListItemButton>
-                                    </Link>
-                                </ListItem>
-                            ))}
-                        </div>
-
-                        <ListItem disablePadding sx={{ display: 'block' }}>
-                            <ListItemButton
-                                onClick={handleLogOut}
-                                sx={{
-                                    minHeight: 48,
-                                    justifyContent: open ? 'initial' : 'center',
-                                    px: 2.5,
-                                }}>
-                                <ListItemIcon
-                                    className="side_icon"
-                                    sx={{
-                                        minWidth: 0,
-                                        mr: open ? 3 : 'auto',
-                                        justifyContent: 'center',
-                                    }}>
-                                    <LogoutIcon />
-                                </ListItemIcon>
-                                <ListItemText
-                                    className="side_text"
-                                    primary={'Đăng suất'}
-                                    sx={{ opacity: open ? 1 : 0 }}
-                                />
-                            </ListItemButton>
-                        </ListItem>
-                    </List>
-                </div>
-            </Drawer>
         </Box>
     );
 }
 
-export default memo(Sidebar);
+export default memo(HeaderOnly);

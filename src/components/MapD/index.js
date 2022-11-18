@@ -50,8 +50,8 @@ function MapD({
         longitude: longitudeDefault,
         zoom: zoomDefault,
         transitionDuration: 1000,
-        transitionInterpolator: new FlyToInterpolator(),
-        transitionEasing: easeCubic,
+        transitionInterpolator: new FlyToInterpolator({ speed: 1.2 }),
+        transitionEasing: 'auto',
     });
 
     // get station
@@ -59,7 +59,6 @@ function MapD({
 
     //
     const [popupInfo, setPopupInfo] = useState(null);
-    // console.log(popupInfo);
     return (
         <MapGL
             {...viewport}
@@ -71,18 +70,6 @@ function MapD({
             goongApiAccessToken={GOONG_MAPTILES_KEY}>
             <Pins data={data} onClick={setPopupInfo} showMarkerInfo={showMarkerInfo} />
 
-            {/* {popupInfo && (
-                <Popup
-                    tipSize={5}
-                    anchor="top"
-                    longitude={popupInfo.longitude}
-                    latitude={popupInfo.latitude}
-                    closeOnClick={true}
-                    closeButton={true}
-                    onClose={setPopupInfo}>
-                    <StationInfo info={popupInfo} />
-                </Popup>
-            )} */}
             {showMarkerInfo ? (
                 <Popup
                     tipSize={10}

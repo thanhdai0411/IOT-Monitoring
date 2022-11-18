@@ -12,7 +12,7 @@ function SubHeader({ text, component = <></> }) {
                 fontWeight: '600',
                 borderRadius: '3px',
             }}>
-            <p style={{ fontSize: '18px' }}>{text}</p>
+            <p style={{ fontSize: '18px', textTransform: 'uppercase' }}>{text}</p>
             {component}
         </div>
     );

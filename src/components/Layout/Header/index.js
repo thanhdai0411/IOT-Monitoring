@@ -18,6 +18,7 @@ import { useNavigate } from 'react-router-dom';
 
 import Toast from '../../../utils/toasts';
 import './Header.scss';
+import Cookies from 'js-cookie';
 
 const AppBar = styled(MuiAppBar, {
     shouldForwardProp: (prop) => prop !== 'open',
@@ -60,6 +61,7 @@ function Header({ handleOpenSidebar }) {
             .then(() => {
                 sessionStorage.clear();
                 localStorage.clear();
+                Cookies.remove('auth_token');
                 Toast('success', 'Bạn đã đăng suất ra khỏi hệ thống');
                 navigate('/');
             })

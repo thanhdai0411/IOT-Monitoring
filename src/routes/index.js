@@ -9,6 +9,14 @@ import Report from '../pages/Report';
 import MyMap from '../pages/Map';
 import History from '../pages/History';
 import Search from '../pages/Search';
+import NotDevice from '../pages/NotDevice';
+
+// level 2
+import DetailChart from '../components/DetailChart';
+
+// layout
+import OnlyHeader from '../components/Layout/OnlyHeader';
+
 // public route
 const privateRoutes = [
     {
@@ -46,6 +54,15 @@ const privateRoutes = [
     {
         path: '/search',
         component: History,
+    },
+    {
+        path: '/search/chart/:station',
+        component: DetailChart,
+    },
+    {
+        path: '/nothing',
+        component: NotDevice,
+        layout: OnlyHeader,
     },
 ];
 
