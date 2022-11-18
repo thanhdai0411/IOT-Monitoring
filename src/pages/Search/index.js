@@ -358,7 +358,7 @@ function Search() {
             {/* <SubHeader text={'GIÁM SÁT TRỰC TUYẾN TRẠM NƯỚC THẢI'} /> */}
             <div className="monitor_page-select">
                 <Grid container spacing={1}>
-                    <Grid item xs={3}>
+                    <Grid item xl={3} lg={3} md={12} sm={12} xs={12}>
                         <Autocomplete
                             id="controllable-states-demo"
                             size="small"
@@ -371,21 +371,21 @@ function Search() {
                             )}
                         />
                     </Grid>
-                    <Grid item xs={2.5}>
+                    <Grid item xl={2.5} lg={2.5} md={3} sm={4} xs={12}>
                         <MyDateRange
                             label={'Bắt đầu'}
                             onChange={handleChangeStartDate}
                             value={startDate}
                         />
                     </Grid>
-                    <Grid item xs={2.5}>
+                    <Grid item xl={2.5} lg={2.5} md={3} sm={4} xs={12}>
                         <MyDateRange
                             label={'Kết thúc'}
                             onChange={handleChangeEndDate}
                             value={endDate}
                         />
                     </Grid>
-                    <Grid item xs={2}>
+                    <Grid item xl={2} lg={2} md={3} sm={4} xs={12}>
                         <Button
                             variant="contained"
                             style={{ backgroundColor: 'orange' }}
@@ -396,7 +396,7 @@ function Search() {
                             Biểu đồ
                         </Button>
                     </Grid>
-                    <Grid item xs={2}>
+                    <Grid item xl={2} lg={2} md={3} sm={12} xs={12}>
                         <Button
                             variant="contained"
                             style={{ backgroundColor: '#088f81' }}

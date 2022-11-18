@@ -23,7 +23,12 @@ function Auth() {
                 <div className="auth_wrap">
                     <div className="auth_container">
                         <div className="bg_auth_wrap">
-                            <img src="/image/logo_cpn.png" width={200} alt="" />
+                            <img
+                                className="auth_logo"
+                                src="/image/logo_cpn.png"
+                                width={200}
+                                alt=""
+                            />
                             <div className="bg_auth"></div>
                         </div>
                         <div className="login_register">

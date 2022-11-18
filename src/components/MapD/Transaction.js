@@ -9,13 +9,9 @@ import MapGL, {
 import { easeCubic } from 'd3-ease';
 import { useCallback } from 'react';
 import { memo, useMemo, useState } from 'react';
+import ControlPanelMap from './ControlPanelMap';
 import Pins from './Pins';
 import StationInfo from './StationInfo';
-import map_style from '../../utils/map_style.json';
-
-import ControlPanelMap from '../ControlPanelMap';
-import TabStateStation from '../TabStateStation';
-
 const GOONG_MAPTILES_KEY = process.env.REACT_APP_GOONG_MAPTILES_KEY;
 
 const navControlStyle = {
@@ -27,7 +23,7 @@ const fullscreenControlStyle = {
     top: 10,
 };
 
-function MapD({
+function TransactionMap({
     height = '100vh',
     data = [
         {
@@ -50,42 +46,38 @@ function MapD({
     longitudeDefault = 105.6297,
     zoomDefault = 6,
     showMarkerInfo = false,
-    showTabState = true,
-    showBtnAll = true,
 }) {
     const [viewport, setViewport] = useState({
         latitude: latitudeDefault,
         longitude: longitudeDefault,
         zoom: zoomDefault,
-        transitionDuration: 'auto',
         transitionInterpolator: new FlyToInterpolator({ speed: 1.2 }),
+        transitionDuration: 'auto',
     });
 
-    const onSelectCity = useCallback((longitude, latitude) => {
-        if (longitude && latitude)
-            setViewport({
-                longitude,
-                latitude,
-                zoom: 15,
-                transitionInterpolator: new FlyToInterpolator({ speed: 1.2 }),
-                transitionDuration: 'auto',
-            });
+    const onSelectCity = useCallback(({ longitude, latitude }) => {
+        setViewport({
+            longitude,
+            latitude,
+            zoom: 11,
+            transitionInterpolator: new FlyToInterpolator({ speed: 1.2 }),
+            transitionDuration: 'auto',
+        });
     }, []);
 
+    //
     const [popupInfo, setPopupInfo] = useState(null);
     return (
         <MapGL
             {...viewport}
             width="100%"
             height={height}
-            mapStyle={map_style}
+            mapStyle="https://tiles.goong.io/assets/goong_map_web.json"
             onViewportChange={setViewport}
             showCompass={true}
             goongApiAccessToken={GOONG_MAPTILES_KEY}>
-            {showTabState && <TabStateStation top="2%" left="2%" />}
-            {showBtnAll && <ControlPanelMap data={data} onSelectCity={onSelectCity} />}
-
             <Pins data={data} onClick={setPopupInfo} showMarkerInfo={showMarkerInfo} />
+            <ControlPanelMap onSelectCity={onSelectCity} />
 
             {showMarkerInfo ? (
                 <Popup
@@ -115,4 +107,4 @@ function MapD({
         </MapGL>
     );
 }
-export default memo(MapD);
+export default memo(TransactionMap);

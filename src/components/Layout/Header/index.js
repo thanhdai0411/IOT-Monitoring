@@ -86,7 +86,12 @@ function Header({ handleOpenSidebar }) {
                     <MenuIcon />
                 </IconButton>
                 {/* <img src="/image/logo_cpn.png" width={120} alt="" /> */}
-                <Typography sx={{ flexGrow: 1 }} variant="h6" noWrap component="div">
+                <Typography
+                    sx={{ flexGrow: 1 }}
+                    className="header_title"
+                    variant="h6"
+                    noWrap
+                    component="div">
                     QUẢN LÝ DỮ LIỆU QUAN TRẮC
                 </Typography>
                 <Avatar

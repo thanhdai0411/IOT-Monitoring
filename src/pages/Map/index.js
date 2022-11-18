@@ -5,6 +5,7 @@ import MapD from '../../components/MapD';
 import compareDate from '../../utils/compare_date';
 import { getUniqueListBy } from '../../utils/function';
 import Toast from '../../utils/toasts';
+import ControlPanelMap from '../../components/ControlPanelMap';
 
 import Loading from '../../components/Loading';
 
@@ -195,7 +196,8 @@ function MyMap() {
             {dataCoordinates.length ? (
                 <div>
                     <MapD data={dataCoordinates} />
-                    <div style={{ position: 'absolute', left: '7%', top: '13%', display: 'flex' }}>
+                    {/* <ControlPanelMap data={dataCoordinates} /> */}
+                    {/* <div style={{ position: 'absolute', left: '7%', top: '13%', display: 'flex' }}>
                         <div style={{ marginRight: '5px' }}>
                             <div
                                 style={{
@@ -232,7 +234,7 @@ function MyMap() {
                                 }}></div>
                             <p style={{ fontSize: '10px' }}>Không hoạt động</p>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             ) : (
                 // <p style={{ textAlign: 'center', marginTop: '50px' }}>Vui lòng chờ ...</p>

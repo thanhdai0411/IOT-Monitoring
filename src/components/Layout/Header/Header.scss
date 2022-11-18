@@ -1,3 +1,10 @@
+@use '../../../scss/' as *;
 .header {
-    background-color: var(--primary-color) !important ;
+    background-color: var(--primary-color) !important;
+    @include mobile {
+
+        .header_title {
+            font-size: 16px;
+        }
+    }
 }

@@ -264,7 +264,7 @@ function Monitor() {
                                 <Grid item xs={3}>
                                     <MySelect label="Chọn Mức Cảnh Báo" />
                                 </Grid> */}
-                                <Grid item xs={6}>
+                                <Grid item xl={6} lg={6} md={6} sm={12} xs={12}>
                                     <Autocomplete
                                         id="controllable-states-demo"
                                         size="small"
@@ -277,7 +277,7 @@ function Monitor() {
                                         )}
                                     />
                                 </Grid>
-                                <Grid item xs={2}>
+                                <Grid item xl={2} lg={2} md={2} sm={12} xs={12}>
                                     <Button
                                         variant="contained"
                                         style={{ backgroundColor: '#088f81' }}

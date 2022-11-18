@@ -375,7 +375,7 @@ export default function Login() {
                                     startIcon={<LocalPhoneRoundedIcon />}
                                     size="large"
                                     onClick={handleShowFormPhone}>
-                                    ĐĂNG NHẬP BẰNG SỐ ĐIỆN THOẠI
+                                    ĐĂNG NHẬP BẰNG SMS
                                 </Button>
                             )}
                         </div>

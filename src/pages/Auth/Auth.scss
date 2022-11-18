@@ -1,3 +1,5 @@
+@use '../../scss/' as *;
+
 .auth_wrap {
     background-color: var(--auth-page-color);
     height: 100vh;
@@ -12,50 +14,100 @@
     justify-content: center;
     align-items: center;
     background-color: #fff;
-    min-width: 870px;
-    // padding : 20px;
+    width: 870px;
     border-radius: 10px;
     box-shadow: 3px 4px 57px rgb(0, 0, 0, 0.4);
     overflow: hidden;
 
-    .bg_auth_wrap {
-        
-        padding: 20px;
-        background-color: rgb(6, 107, 96);
-        width: 50%;
-        display: flex;
-        justify-content: center;
+    @include tablet-large {
         flex-direction: column;
-        align-items: center;
+        width: 520px;
 
-        // height: 450px;
-        .bg_auth {
-            background-image: url('../../../public/image/login1.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
+    }
 
-            width: 80%;
-            height: 360px;
+    @include tablet {
+        flex-direction: column;
+        width: 450PX;
+
+    }
+    @include mobile {
+        flex-direction: column;
+        width: 90%;
+
+    }
+
+    @include desktop {
+        .bg_auth_wrap {
+
+            padding: 20px;
+            background-color: rgb(6, 107, 96);
+            width: 50%;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+
+            // height: 450px;
+            .bg_auth {
+                background-image: url('../../../public/image/login1.png');
+                background-size: contain;
+                background-repeat: no-repeat;
+                background-position: center;
+
+                width: 80%;
+                height: 360px;
+            }
         }
     }
 
+    .auth_logo {
+        @include mobile {
+                width: 150px;
+            }
+    }
+
+
+
     .login_register {
         background-color: #fff;
-        height: 450px;
         width: 50%;
+
+        @include tablet-large {
+            height: 450px;
+            width: 100%;
+            flex-direction: column;
+
+        }
+
+        @include tablet {
+            height: 450px;
+            width: 100%;
+            flex-direction: column;
+
+        }
+        @include mobile {
+            height: 450px;
+            width: 100%;
+            flex-direction: column;
+
+        }
     }
 }
 
 .form_login {
+    width: 100%;
     padding: 0px 30px;
+
     h1 {
         text-align: center;
         margin-bottom: 5px;
+        @include mobile {
+            font-size: 25px;
+            }
     }
 
     .form_input {
-        padding : 8px 0 ;
+        padding: 8px 0;
     }
 
     .break_auth {
@@ -64,7 +116,8 @@
         align-items: center;
         margin: 8px 0;
 
-        .break_first,.break_second {
+        .break_first,
+        .break_second {
             width: 50%;
             height: 2px;
             background-color: #ccc;
@@ -75,19 +128,24 @@
         display: flex;
         padding-top: 10px;
         justify-content: space-between;
+
         .register {
             cursor: pointer;
+
             :hover {
-                color :red;
+                color: red;
             }
         }
+
         .register:hover {
             color: var(--primary-color)
         }
+
         .forgot_pass {
             cursor: pointer;
 
         }
+
         .forgot_pass:hover {
             color: var(--primary-color)
         }
@@ -96,9 +154,10 @@
 
     .login_social {
         margin-top: 10px;
+
         &-gg {
             margin-bottom: 10px;
-        }   
+        }
     }
-    
+
 }

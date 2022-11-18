@@ -260,7 +260,7 @@ function Home() {
                                         onChange={handleOnChangeSelectStation}
                                     />
                                 </Grid> */}
-                                <Grid item xs={6}>
+                                <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
                                     <Autocomplete
                                         id="controllable-states-demo"
                                         size="small"
@@ -273,7 +273,6 @@ function Home() {
                                         )}
                                     />
                                 </Grid>
-                                <Grid item xs={6}></Grid>
                             </Grid>
                         </div>
                         <Box sx={{ flexGrow: 1 }}>
@@ -358,6 +357,8 @@ function Home() {
                                                 <MapD
                                                     height="500px"
                                                     data={dataCoordinates}
+                                                    showTabState={false}
+                                                    showBtnAll={false}
                                                     longitudeDefault={
                                                         listDevice[valueSelect.id]['longitude']
                                                     }
