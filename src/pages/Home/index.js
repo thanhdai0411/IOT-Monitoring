@@ -32,30 +32,17 @@ import { useNavigate } from 'react-router-dom';
 
 const TIME_DEVICE_OFF = 30;
 
-const top100Films = [
-    { label: 'The Shawshank Redemption', year: 1994 },
-    { label: 'The Godfather', year: 1972 },
-    { label: 'The Godfather: Part II', year: 1974 },
-    { label: 'The Dark Knight', year: 2008 },
-    { label: '12 Angry Men', year: 1957 },
-    { label: "Schindler's List", year: 1993 },
-    { label: 'Pulp Fiction', year: 1994 },
-];
-
 function Home() {
     const [dataChange, setDataChange] = useState(false);
-    const [menuValue, setMenuSelect] = useState([]);
     const [valueSelect, setValueSelect] = useState('');
 
     const [endDate, setEndDate] = useState(moment(new Date()).format('HH:mm MM/DD/YYYY'));
-    const [startDate, setStartDate] = useState(moment(new Date()).format('00:00 MM/DD/YYYY'));
-
-    const [endDateTemp, setEndDateTemp] = useState(moment(new Date()).format('HH:mm MM/DD/YYYY'));
-    const [startDateTemp, setStartDateTemp] = useState(
-        moment(new Date()).subtract(1, 'days').format('7:00 MM/DD/YYYY')
+    const [startDate, setStartDate] = useState(
+        moment(new Date()).subtract(2, 'h').format('HH:mm MM/DD/YYYY')
     );
-    const [noneDevice, setNoneDevice] = useState(false);
 
+    const [inputValue, setInputValue] = useState('');
+    console.log({ inputValue });
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -71,9 +58,8 @@ function Home() {
         navigate('/nothing');
     }
 
+    let devices = [];
     useEffect(() => {
-        let devices = [];
-
         if (listDevice) {
             const id = Object.keys(listDevice);
             id.map((v) => {
@@ -85,6 +71,7 @@ function Home() {
         }
         setMenuSelect(devices);
     }, []);
+    const [menuValue, setMenuSelect] = useState(devices[0]);
 
     useEffect(() => {
         AsyncLocalStorage.getItem('home_station').then((station) => {
@@ -160,9 +147,6 @@ function Home() {
         });
     }
 
-    //**************************************************************************** */
-    //**************************************************************************** */
-
     // add value for field input
     const dataCoordinates = [];
     if (listDevice && valueSelect) {
@@ -185,25 +169,6 @@ function Home() {
         }
     };
 
-    // start date
-    const handleChangeStartDate = (e) => {
-        const startTime = moment(e.$d).format('HH:mm MM-DD-YYYY');
-        setStartDateTemp(startTime);
-    };
-
-    // end date
-    const handleChangeEndDate = (e) => {
-        const endTime = moment(e.$d).format('HH:mm MM-DD-YYYY');
-        setEndDateTemp(endTime);
-    };
-
-    // apply date
-    const handleApplyDate = (e) => {
-        console.log({ endDateTemp, startDateTemp });
-        setStartDate(startDateTemp);
-        setEndDate(endDateTemp);
-    };
-
     //style for card
     const styleForCard = (value) => {
         let stateSensor = value.split('*')[1];
@@ -222,7 +187,7 @@ function Home() {
         }
     };
 
-    console.log({ valueSelect });
+    // console.log({ valueSelect });
     return (
         <>
             <div className="home_page">
@@ -268,6 +233,10 @@ function Home() {
                                         onChange={handleOnChangeSelectStation}
                                         options={menuValue}
                                         value={valueSelect.label}
+                                        inputValue={inputValue}
+                                        onInputChange={(event, newInputValue) => {
+                                            setInputValue(newInputValue);
+                                        }}
                                         renderInput={(params) => (
                                             <TextField {...params} label="Chọn trạm giám sát" />
                                         )}

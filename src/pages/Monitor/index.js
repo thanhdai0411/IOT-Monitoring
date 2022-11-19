@@ -277,7 +277,7 @@ function Monitor() {
                                         )}
                                     />
                                 </Grid>
-                                <Grid item xl={2} lg={2} md={2} sm={12} xs={12}>
+                                <Grid item xl={2} lg={2} md={6} sm={12} xs={12}>
                                     <Button
                                         variant="contained"
                                         style={{ backgroundColor: '#088f81' }}

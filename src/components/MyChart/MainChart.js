@@ -174,7 +174,7 @@ function MainChart({ endDate, startDate, deviceUser }) {
         endDataForChart = mergeItemObjectArrToObject(output);
     }
 
-    console.log({ endDataForChart });
+    // console.log({ endDataForChart });
 
     return (
         <>

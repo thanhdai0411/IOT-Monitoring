@@ -94,7 +94,7 @@ function SubChart({
                 {/* <CartesianGrid strokeDasharray="3 3" stroke="#ccc" /> */}
                 {/* <XAxis dataKey="name" /> */}
                 {/* <YAxis /> */}
-                <Tooltip content={<CustomTooltip />} />
+                {/* <Tooltip content={<CustomTooltip />} /> */}
                 {/* <Legend /> */}
                 <Area
                     type="monotone"

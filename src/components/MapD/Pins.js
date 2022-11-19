@@ -19,7 +19,6 @@ function Pins({ data, onClick }) {
                 ? 'gray'
                 : 'red';
         if (city.longitude && city.latitude) {
-            console.log({ long: city.longitude, lat: city.latitude, name: city.name });
             return (
                 <Marker key={`marker-${index}`} longitude={city.longitude} latitude={city.latitude}>
                     <LocationOnIcon

@@ -121,10 +121,14 @@ function Sidebar() {
     return (
         <Box sx={{ display: 'flex' }} style={{ backgroundColor: 'red !important' }}>
             {/* <CssBaseline /> */}
-
             <Header handleOpenSidebar={handleOpenSidebar} />
-
-            <Drawer variant="permanent" open={open}>
+            {/* //xl={5} lg={5} md={12} sm={12} xs={12} */}
+            <Drawer
+                variant="permanent"
+                open={open}
+                sx={{
+                    display: { xs: open ? 'block' : 'none', sm: 'block' },
+                }}>
                 <div className="side_bar">
                     <DrawerHeader></DrawerHeader>
                     <List className="side_bar-list">
