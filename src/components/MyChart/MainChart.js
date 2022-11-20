@@ -225,7 +225,7 @@ function MainChart({ endDate, startDate, deviceUser }) {
                             Vui lòng chờ...
                         </span>{' '}
                         <br />
-                        Trường hợp không hiện thị <br /> xin vui lòng chọn lại trạm giám sát
+                        Trường hợp không hiện thị <br /> vì không có dữ liệu mới nhất
                     </p>
                 </div>
             )}

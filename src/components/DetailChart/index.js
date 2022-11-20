@@ -13,8 +13,10 @@ import { useSelector } from 'react-redux';
 import { dataChartSelector, listSensorStationSelector } from '../../redux/reducer/dataSensorSlice';
 
 import { useParams, useNavigate } from 'react-router-dom';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 import MyButton from '../../components/MyButton';
+import './DetailChart.scss';
 
 let data = [
     {
@@ -62,22 +64,19 @@ function DetailChart() {
 
     return (
         <div style={{ height: '500px', width: '90vw', margin: 'auto' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                {endDataForChart ? (
-                    <MyButton fullWidth={false} icon={null} name="Trờ về" onClick={handleGoBack} />
-                ) : null}
-
-                <p
+            {endDataForChart.length ? (
+                <div
                     style={{
-                        textAlign: 'center',
-                        fontSize: '25px',
-                        margin: '20px 0',
-                        textTransform: 'uppercase',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
                     }}>
-                    BIỂU ĐỒ DỮ LIỆU {station}
-                </p>
-                <p></p>
-            </div>
+                    <ArrowBackIosIcon onClick={handleGoBack} />
+                    <p className="detail_chart">BIỂU ĐỒ DỮ LIỆU {station}</p>
+                    <p></p>
+                </div>
+            ) : null}
+
             {endDataForChart.length > 0 ? (
                 <ResponsiveContainer width="100%" height="100%">
                     <LineChart
@@ -114,7 +113,9 @@ function DetailChart() {
                 </ResponsiveContainer>
             ) : (
                 <div style={{ textAlign: 'center' }}>
-                    <p style={{ fontSize: '20px', marginBottom: '10px' }}>Không có dữ liệu</p>
+                    <p style={{ fontSize: '20px', marginBottom: '10px', marginTop: '20px' }}>
+                        Không có dữ liệu
+                    </p>
                     <MyButton
                         fullWidth={false}
                         icon={null}

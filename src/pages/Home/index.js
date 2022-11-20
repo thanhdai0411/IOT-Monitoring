@@ -10,6 +10,7 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import MapD from '../../components/MapD';
 import MainChart from '../../components/MyChart/MainChart';
+import Loading from '../../components/Loading';
 
 import { getDatabase, onValue, ref } from 'firebase/database';
 
@@ -35,6 +36,7 @@ const TIME_DEVICE_OFF = 30;
 function Home() {
     const [dataChange, setDataChange] = useState(false);
     const [valueSelect, setValueSelect] = useState('');
+    const [menuValue, setMenuSelect] = useState('');
 
     const [endDate, setEndDate] = useState(moment(new Date()).format('HH:mm MM/DD/YYYY'));
     const [startDate, setStartDate] = useState(
@@ -42,7 +44,7 @@ function Home() {
     );
 
     const [inputValue, setInputValue] = useState('');
-    console.log({ inputValue });
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -71,12 +73,13 @@ function Home() {
         }
         setMenuSelect(devices);
     }, []);
-    const [menuValue, setMenuSelect] = useState(devices[0]);
 
     useEffect(() => {
         AsyncLocalStorage.getItem('home_station').then((station) => {
             if (station) {
                 setValueSelect(JSON.parse(station));
+            } else {
+                setValueSelect(devices[0]);
             }
         });
     }, []);
@@ -379,7 +382,7 @@ function Home() {
                         </Box>
                     </>
                 ) : (
-                    <p>Loading</p>
+                    <Loading />
                 )}
             </div>
         </>

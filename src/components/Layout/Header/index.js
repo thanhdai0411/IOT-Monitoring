@@ -108,12 +108,12 @@ function Header({ handleOpenSidebar }) {
                     MenuListProps={{
                         'aria-labelledby': 'basic-button',
                     }}>
-                    <MenuItem onClick={handleCloseMenu}>
+                    {/* <MenuItem onClick={handleCloseMenu}>
                         <ListItemIcon>
                             <PersonAdd fontSize="small" />
                         </ListItemIcon>
                         Profile
-                    </MenuItem>
+                    </MenuItem> */}
                     <MenuItem onClick={handleLogOut}>
                         <ListItemIcon>
                             <Logout fontSize="small" />
@@ -121,7 +121,7 @@ function Header({ handleOpenSidebar }) {
                         Logout
                     </MenuItem>
                 </Menu>
-                <p style={{ marginLeft: '10px', fontSize: '20px' }}>{username}</p>
+                <p className="header_username">{username}</p>
             </Toolbar>
         </AppBar>
     );
