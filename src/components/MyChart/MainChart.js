@@ -225,7 +225,8 @@ function MainChart({ endDate, startDate, deviceUser }) {
                             Vui lòng chờ...
                         </span>{' '}
                         <br />
-                        Trường hợp không hiện thị <br /> vì không có dữ liệu mới nhất
+                        Trường hợp không hiện thị vì không có dữ liệu <br /> bạn có thể chọn khoảng
+                        thời gian khác
                     </p>
                 </div>
             )}

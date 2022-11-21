@@ -11,6 +11,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import MapD from '../../components/MapD';
 import MainChart from '../../components/MyChart/MainChart';
 import Loading from '../../components/Loading';
+import MyDateRange from '../../components/DateRange';
 
 import { getDatabase, onValue, ref } from 'firebase/database';
 
@@ -27,6 +28,7 @@ import { getSensorName } from '../../redux/reducer/dataSensorSlice';
 import AsyncLocalStorage from '../../utils/async_localstorage';
 
 import { useNavigate } from 'react-router-dom';
+import MyButton from '../../components/MyButton';
 
 // const MainChart = lazy(() => import('../../components/MyChart/MainChart'));
 // const MapD = lazy(() => import('../../components/MapD'));
@@ -40,6 +42,11 @@ function Home() {
 
     const [endDate, setEndDate] = useState(moment(new Date()).format('HH:mm MM/DD/YYYY'));
     const [startDate, setStartDate] = useState(
+        moment(new Date()).subtract(2, 'h').format('HH:mm MM/DD/YYYY')
+    );
+
+    const [endDateTemp, setEndDateTemp] = useState(moment(new Date()).format('HH:mm MM/DD/YYYY'));
+    const [startDateTemp, setStartDateTemp] = useState(
         moment(new Date()).subtract(2, 'h').format('HH:mm MM/DD/YYYY')
     );
 
@@ -124,6 +131,21 @@ function Home() {
                 });
             });
     }, [valueSelect]);
+
+    const handleChangeStartDate = (e) => {
+        const startTime = moment(e.$d).format('HH:mm MM-DD-YYYY');
+        setStartDateTemp(startTime);
+    };
+
+    const handleChangeEndDate = (e) => {
+        const endTime = moment(e.$d).format('HH:mm MM-DD-YYYY');
+        setEndDateTemp(endTime);
+    };
+
+    const handleApplyDate = (e) => {
+        setStartDate(startDateTemp);
+        setEndDate(endDateTemp);
+    };
 
     // handle data get from firebase
     let arr = useRef();
@@ -327,7 +349,7 @@ function Home() {
                                         {valueSelect ? (
                                             <div className="home_map">
                                                 <MapD
-                                                    height="500px"
+                                                    height="548px"
                                                     data={dataCoordinates}
                                                     showTabState={false}
                                                     showBtnAll={false}
@@ -351,22 +373,55 @@ function Home() {
                                     <Grid item xl={7} lg={7} md={12} sm={12} xs={12}>
                                         <Grid container spacing={1}>
                                             {valueSelect ? (
-                                                <Grid
-                                                    item
-                                                    xl={12}
-                                                    lg={12}
-                                                    md={12}
-                                                    sm={12}
-                                                    xs={12}
-                                                    style={{}}>
-                                                    <div className="home_chart">
-                                                        <MainChart
-                                                            endDate={endDate}
-                                                            startDate={startDate}
-                                                            deviceUser={valueSelect.id}
-                                                        />
-                                                    </div>
-                                                </Grid>
+                                                <>
+                                                    <Grid
+                                                        item
+                                                        xl={12}
+                                                        lg={12}
+                                                        md={12}
+                                                        sm={12}
+                                                        xs={12}
+                                                        style={{}}>
+                                                        <div className="home_chart">
+                                                            <MainChart
+                                                                endDate={endDate}
+                                                                startDate={startDate}
+                                                                deviceUser={valueSelect.id}
+                                                            />
+                                                        </div>
+                                                    </Grid>
+                                                    <Grid
+                                                        item
+                                                        xl={12}
+                                                        lg={12}
+                                                        md={12}
+                                                        sm={12}
+                                                        xs={12}>
+                                                        <Grid container spacing={2}>
+                                                            <Grid item xs={4}>
+                                                                <MyDateRange
+                                                                    label={'Bắt đầu'}
+                                                                    onChange={handleChangeStartDate}
+                                                                    value={startDateTemp}
+                                                                />
+                                                            </Grid>
+                                                            <Grid item xs={4}>
+                                                                <MyDateRange
+                                                                    label={'Kết thúc'}
+                                                                    onChange={handleChangeEndDate}
+                                                                    value={endDateTemp}
+                                                                />
+                                                            </Grid>
+                                                            <Grid item xs={4}>
+                                                                <MyButton
+                                                                    icon={null}
+                                                                    name={'Áp dụng'}
+                                                                    onClick={handleApplyDate}
+                                                                />
+                                                            </Grid>
+                                                        </Grid>
+                                                    </Grid>
+                                                </>
                                             ) : (
                                                 <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
                                                     <Skeleton
@@ -390,31 +445,3 @@ function Home() {
 }
 
 export default Home;
-
-{
-    /* <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
-                                                    <Grid container spacing={2}>
-                                                        <Grid item xs={4}>
-                                                            <MyDateRange
-                                                                label={'Bắt đầu'}
-                                                                onChange={handleChangeStartDate}
-                                                                value={startDate}
-                                                            />
-                                                        </Grid>
-                                                        <Grid item xs={4}>
-                                                            <MyDateRange
-                                                                label={'Kết thúc'}
-                                                                onChange={handleChangeEndDate}
-                                                                value={endDate}
-                                                            />
-                                                        </Grid>
-                                                        <Grid item xs={4}>
-                                                            <MyButton
-                                                                icon={null}
-                                                                name={'Áp dụng'}
-                                                                onClick={handleApplyDate}
-                                                            />
-                                                        </Grid>
-                                                    </Grid>
-                                                </Grid> */
-}

@@ -6,6 +6,15 @@ import { privateRoutes, publicRoutes } from './routes';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ProtectedRoute from './routes/ProtectedRoute';
+
+var DEBUG = false;
+if (!DEBUG) {
+    if (!window.console) window.console = {};
+    var methods = ['log', 'debug', 'warn', 'info'];
+    for (var i = 0; i < methods.length; i++) {
+        console[methods[i]] = function () {};
+    }
+}
 function App() {
     const id = useId();
 
