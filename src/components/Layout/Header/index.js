@@ -3,6 +3,7 @@ import { memo, useState, useCallback } from 'react';
 
 import Logout from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import { ListItemIcon } from '@mui/material';
 import MuiAppBar from '@mui/material/AppBar';
@@ -83,7 +84,7 @@ function Header({ handleOpenSidebar }) {
                         marginRight: 2,
                         // ...(open && { display: 'none' }),
                     }}>
-                    <MenuIcon />
+                    {open ? <CloseIcon /> : <MenuIcon />}
                 </IconButton>
                 {/* <img src="/image/logo_cpn.png" width={120} alt="" /> */}
                 <Typography

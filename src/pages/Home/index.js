@@ -92,7 +92,6 @@ function Home() {
             }
         });
     }, []);
-    console.log({ cameraList });
     // get data from firebase
     useEffect(() => {
         if (valueSelect)
@@ -188,7 +187,6 @@ function Home() {
     // handle onchange select station
 
     const handleOnChangeSelectStation = (e, v) => {
-        console.log(v);
         if (v !== null) {
             AsyncLocalStorage.setItem('home_station', JSON.stringify(v)).then(() => {
                 setValueSelect(v);
@@ -374,7 +372,7 @@ function Home() {
                                     </Grid>
 
                                     <Grid item xl={7} lg={7} md={12} sm={12} xs={12}>
-                                        <Grid container spacing={1}>
+                                        <Grid container spacing={0.5}>
                                             {valueSelect ? (
                                                 <>
                                                     <Grid

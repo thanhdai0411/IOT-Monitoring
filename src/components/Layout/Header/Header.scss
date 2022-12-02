@@ -7,6 +7,7 @@
 
         .header_title {
             font-size: 16px;
+            
         }
     }
 
@@ -16,6 +17,7 @@
 
         @include mobile {
             font-size: 16px;
+            display: none;
 
         }
     }

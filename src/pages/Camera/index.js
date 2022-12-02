@@ -6,6 +6,7 @@ import SubHeader from '../../components/SubHeader';
 import './Camera.scss';
 import asyncLocalStorage from '../../utils/async_localstorage';
 import Loading from '../../components/Loading';
+
 function Camera() {
     const [dataChange, setDataChange] = useState(false);
     const [valueSelect, setValueSelect] = useState('');
@@ -31,9 +32,10 @@ function Camera() {
     }, []);
 
     const handleOnChangeSelectStation = (e, v) => {
-        console.log(v);
-        setValueSelect(v);
-        setCameraList(listDevice[v.id]['cameraList']);
+        if (v !== null) {
+            setValueSelect(v);
+            setCameraList(listDevice[v.id]['cameraList']);
+        }
     };
 
     useEffect(() => {
@@ -49,7 +51,6 @@ function Camera() {
         });
     }, []);
 
-    console.log({ cameraList });
     // console.log({ valueSelect });
 
     return (
@@ -82,15 +83,17 @@ function Camera() {
             <div>
                 <Grid container spacing={2}>
                     {cameraList.length ? (
-                        cameraList.map((v) => {
-                            console.log(cameraList, v);
+                        cameraList.map((v, index) => {
                             return (
-                                <Grid item xl={6} lg={6} md={6} sm={12} xs={12}>
+                                <Grid key={index} item xl={6} lg={6} md={6} sm={12} xs={12}>
                                     <CardMedia
                                         component="video"
                                         height="350"
                                         autoPlay
                                         controls
+                                        playsInline
+                                        loop
+                                        muted
                                         src={v}
                                         alt="Paella dish"
                                     />

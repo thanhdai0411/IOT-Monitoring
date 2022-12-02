@@ -21,7 +21,7 @@ export default function MyDateRange({ label, onChange, value, Type = 'DAY' }) {
                 label={label}
                 value={value}
                 onChange={onChange}
-                renderInput={(params) => <TextField size="small" {...params} />}
+                renderInput={(params) => <TextField fullWidth size="small" {...params} />}
             />
             {/* <DesktopDateTimePicker
                 label={label}

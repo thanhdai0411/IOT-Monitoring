@@ -30,6 +30,8 @@ export default function Register({ backToLogin }) {
     const [emailPass, setEmailPass] = useState('');
     const [emailPassAgain, setEmailPassAgain] = useState('');
 
+    const [registerComplete, setRegisterComplete] = useState(false);
+
     const navigate = useNavigate();
 
     // back to login page
@@ -58,55 +60,41 @@ export default function Register({ backToLogin }) {
             setValidateEmailPassAgain(true);
             return;
         }
+        if (emailPass.length < 6) {
+            Toast('error', 'Mật khấu ít nhất là 6 kí tự');
+            return;
+        }
 
         if (emailPass !== emailPassAgain) {
             Toast('error', 'Nhập lại mật khẩu không đúng. Xin thử lại');
             return;
         }
 
-        const actionCodeSettings = {
-            // URL you want to redirect back to. The domain (www.example.com) for this
-            // URL must be in the authorized domains list in the Firebase Console.
-            url: 'https://datalogger.iotdaiviet.com/',
-        };
+        setRegisterComplete(true);
 
-        sendSignInLinkToEmail(authentication, email, actionCodeSettings)
-            .then(() => {
-                alert('Sent success');
-                // The link was successfully sent. Inform the user.
-                // Save the email locally so you don't need to ask the user for it again
-                // if they open the link on the same device.
-                // window.localStorage.setItem('emailForSignIn', email);
-                // ...
+        createUserWithEmailAndPassword(authentication, email, emailPass)
+            .then((userCredential) => {
+                updateProfile(authentication.currentUser, {
+                    displayName: username,
+                    // photoURL: 'https://example.com/jane-q-user/profile.jpg',
+                }).then(() => {
+                    // sessionStorage.setItem(
+                    //     'auth_token',
+                    //     userCredential._tokenResponse.refreshToken
+                    // );
+                    localStorage.setItem('loginUserName', username);
+                    navigate('/home');
+                    setRegisterComplete(false);
+                    Toast('success', 'Đăng ký thành công. Vui lòng đăng nhập');
+                });
             })
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
-                console.log({ error });
-                // ...
+                console.log({ code: errorCode, message: errorMessage });
+                Toast('error', 'Đăng kí thất bại');
+                setRegisterComplete(false);
             });
-
-        // createUserWithEmailAndPassword(authentication, email, emailPass)
-        //     .then((userCredential) => {
-        //         updateProfile(authentication.currentUser, {
-        //             displayName: username,
-        //             // photoURL: 'https://example.com/jane-q-user/profile.jpg',
-        //         }).then(() => {
-        //             // sessionStorage.setItem(
-        //             //     'auth_token',
-        //             //     userCredential._tokenResponse.refreshToken
-        //             // );
-        //             localStorage.setItem('loginUserName', username);
-        //             navigate('/home');
-        //             Toast('success', 'Đăng ký thành công. Vui lòng đăng nhập');
-        //         });
-        //     })
-        //     .catch((error) => {
-        //         const errorCode = error.code;
-        //         const errorMessage = error.message;
-        //         console.log({ code: errorCode, message: errorMessage });
-        //         Toast('error', 'Tài khoản đã tồn tại');
-        //     });
     };
 
     return (
@@ -191,7 +179,8 @@ export default function Register({ backToLogin }) {
                         variant="contained"
                         size="large"
                         style={{ backgroundColor: '#088f81' }}
-                        onClick={handleRegister}>
+                        onClick={handleRegister}
+                        disabled={registerComplete}>
                         ĐĂNG KÝ NGAY
                     </Button>
                 </div>

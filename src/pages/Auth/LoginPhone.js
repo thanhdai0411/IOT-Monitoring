@@ -16,46 +16,25 @@ import './Auth.scss';
 import Cookies from 'js-cookie';
 import 'react-toastify/dist/ReactToastify.css';
 
-import {
-    GoogleAuthProvider,
-    OAuthProvider,
-    RecaptchaVerifier,
-    signInWithEmailAndPassword,
-    signInWithPhoneNumber,
-    signInWithPopup,
-} from 'firebase/auth';
+import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 
 import asyncLocalStorage from '../../utils/async_localstorage';
 
-const provider = new GoogleAuthProvider();
-const providerApple = new OAuthProvider('apple.com');
-
-export default function LoginSocial({ backToLogin }) {
-    const [showInputPhone, setShowInputPhone] = useState(false);
+export default function LoginPhone({ backToLogin }) {
+    const [showInputPhone, setShowInputPhone] = useState(true);
     const [showInputOTP, setShowInputOTP] = useState(false);
 
-    const [registerForm, setRegisterForm] = useState(false);
-    const [forgotForm, setForgotForm] = useState(false);
-
-    const [validateEmail, setValidateEmail] = useState(false);
-    const [validateEmailPass, setValidateEmailPass] = useState(false);
     const [validatePhone, setValidatePhone] = useState(false);
     const [validateOTP, setValidateOTP] = useState(false);
 
-    const [email, setEmail] = useState('');
-    const [emailPass, setEmailPass] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
 
     const [result, setResult] = useState('');
     const [otp, setOTP] = useState('');
 
     const [disableBtnPhoneNumber, setDisableBtPhoneNumber] = useState(false);
-    const navigate = useNavigate();
 
-    //show input phone
-    const handleShowFormPhone = (e) => {
-        setShowInputPhone(true);
-    };
+    const navigate = useNavigate();
 
     // get deviced user
     const getDeviceUser = (author, accessToken) => {
@@ -99,91 +78,19 @@ export default function LoginSocial({ backToLogin }) {
     // handle login equal email
     const auth = getAuth();
 
-    // login google
-    const handleLoginGG = () => {
-        signInWithPopup(auth, provider)
-            .then((result) => {
-                // This gives you a Google Access Token. You can use it to access the Google API.
-                const credential = GoogleAuthProvider.credentialFromResult(result);
-                const token = credential.accessToken;
-
-                const user = result.user;
-
-                const name = user.displayName;
-                const imgUser = user.photoURL;
-                localStorage.setItem('loginUserName', name);
-                localStorage.setItem('imgUser', imgUser);
-
-                getDeviceUser(user, token);
-            })
-            .catch((error) => {
-                // Handle Errors here.
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                // The email of the user's account used.
-                const email = error.customData.email;
-                // The AuthCredential type that was used.
-                const credential = GoogleAuthProvider.credentialFromError(error);
-                console.log({ errorCode, errorMessage, email, credential });
-                Toast('error', 'Đăng nhập thất bại');
-
-                // ...
-            });
-    };
-
-    // login apple
-
-    providerApple.addScope('email');
-    providerApple.addScope('name');
-
-    providerApple.setCustomParameters({
-        // Localize the Apple authentication screen in French.
-        locale: 'en_US',
-    });
-
-    const handleLoginApple = () => {
-        signInWithPopup(auth, providerApple)
-            .then((result) => {
-                // The signed-in user info.
-                const user = result.user;
-
-                // Apple credential
-                const credential = OAuthProvider.credentialFromResult(result);
-                const accessToken = credential.accessToken;
-
-                const name = user.displayName;
-                const imgUser = user.photoURL;
-                localStorage.setItem('loginUserName', name);
-                localStorage.setItem('imgUser', imgUser);
-
-                getDeviceUser(user, accessToken);
-
-                // ...
-            })
-            .catch((error) => {
-                // Handle Errors here.
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                // The email of the user's account used.
-                const email = error.customData.email;
-                // The credential that was used.
-                const credential = OAuthProvider.credentialFromError(error);
-
-                console.log({ error });
-                Toast('error', 'Đăng nhập thất bại');
-
-                // ...
-            });
-    };
-
     // login equal phone number
     const handleLoginPhoneNumber = () => {
         if (!phoneNumber) {
             setValidatePhone(true);
             return;
         }
+        if (phoneNumber.length < 8) {
+            Toast('error', 'Số điện thoại nhập không hợp lệ');
+            return;
+        }
         const a = phoneNumber.slice(1);
         const phone = '+84' + a;
+
         window.recaptchaVerifier = new RecaptchaVerifier(
             'recaptcha-container',
             {
@@ -191,8 +98,11 @@ export default function LoginSocial({ backToLogin }) {
             },
             auth
         );
+
         setDisableBtPhoneNumber(true);
+
         const verify = window.recaptchaVerifier;
+
         signInWithPhoneNumber(auth, phone, verify)
             .then((confirmationResult) => {
                 console.log({ confirmationResult });
@@ -203,18 +113,18 @@ export default function LoginSocial({ backToLogin }) {
                 setDisableBtPhoneNumber(false);
             })
             .catch((error) => {
-                alert(error);
                 Toast('error', `Đăng nhập thất bại ${error.message} `);
                 setDisableBtPhoneNumber(false);
-
-                // Error; SMS not sent
-                // ...
             });
     };
 
     const verifyOTP = () => {
         if (!otp) {
             setValidateOTP(true);
+            return;
+        }
+        if (otp.length < 6) {
+            Toast('error', 'Mã OTP phải gồm 6 kí tự');
             return;
         }
         result
@@ -239,32 +149,8 @@ export default function LoginSocial({ backToLogin }) {
 
     return (
         <div className="form_login">
-            <h1 style={{ marginBottom: '15px' }}>ĐĂNG NHẬP SOCIAL</h1>
-            <div className="login_social">
-                <div className="login_social-gg">
-                    <Button
-                        fullWidth
-                        variant="outlined"
-                        color="error"
-                        size="medium"
-                        style={{ fontWeight: '500' }}
-                        startIcon={<GoogleIcon sx={{ color: 'red' }} />}
-                        onClick={handleLoginGG}>
-                        ĐĂNG NHẬP BẰNG GOOGLE
-                    </Button>
-                </div>
-                <div className="login_social-gg">
-                    <Button
-                        fullWidth
-                        variant="outlined"
-                        color="success"
-                        size="medium"
-                        style={{ fontWeight: '500', color: 'black' }}
-                        startIcon={<AppleIcon sx={{ color: 'black' }} />}
-                        onClick={handleLoginApple}>
-                        ĐĂNG NHẬP BẰNG APPLE
-                    </Button>
-                </div>
+            <h1 style={{ marginBottom: '15px' }}>ĐĂNG NHẬP SMS</h1>
+            <div className="">
                 {showInputPhone ? (
                     <div className="form_input">
                         {/* <p style={{ marginBottom: '10px' }}>Nhập mật khẩu của bạn</p> */}
@@ -303,7 +189,7 @@ export default function LoginSocial({ backToLogin }) {
                     </div>
                 ) : null}
 
-                <div className="login_social-apple">
+                <div className="">
                     {showInputPhone ? (
                         <Button
                             fullWidth
@@ -323,19 +209,13 @@ export default function LoginSocial({ backToLogin }) {
                             onClick={verifyOTP}>
                             ĐĂNG NHẬP NGAY
                         </Button>
-                    ) : (
-                        <Button
-                            fullWidth
-                            variant="outlined"
-                            startIcon={<LocalPhoneRoundedIcon />}
-                            size="medium"
-                            onClick={handleShowFormPhone}>
-                            ĐĂNG NHẬP BẰNG SMS
-                        </Button>
-                    )}
+                    ) : null}
                 </div>
             </div>
             <div>
+                <p style={{ textAlign: 'center', marginTop: '10px' }}>
+                    Trở về đăng nhập bằng email
+                </p>
                 <div style={{ marginTop: '15px' }}>
                     <Button
                         fullWidth
@@ -346,6 +226,7 @@ export default function LoginSocial({ backToLogin }) {
                     </Button>
                 </div>
             </div>
+            <div id="recaptcha-container"></div>
         </div>
     );
 }

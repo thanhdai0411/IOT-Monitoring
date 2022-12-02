@@ -10,6 +10,7 @@ import MyMap from '../pages/Map';
 import History from '../pages/History';
 import Search from '../pages/Search';
 import NotDevice from '../pages/NotDevice';
+import WebError from '../pages/WebError';
 
 // level 2
 import DetailChart from '../components/DetailChart';
@@ -64,6 +65,11 @@ const privateRoutes = [
         component: NotDevice,
         layout: OnlyHeader,
     },
+    // {
+    //     path: '/error',
+    //     component: WebError,
+    //     layout: OnlyHeader,
+    // },
 ];
 
 // private route

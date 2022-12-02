@@ -154,9 +154,22 @@
 
     .login_social {
         margin-top: 10px;
+        // display: flex;
+        // justify-content: space-around;
+        // align-items: center;
 
         &-gg {
-            margin-bottom: 15px;
+            // flex : 1;
+            margin-bottom: 10px;
+        }
+        &-sms {
+            // flex: 1;
+            // margin: 0 10px;
+            margin-bottom: 10px;
+        }
+        &-apple {
+            // flex: 1;
+            // margin-bottom: 10px;
         }
     }
 

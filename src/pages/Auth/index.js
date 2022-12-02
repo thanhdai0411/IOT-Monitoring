@@ -11,7 +11,6 @@ import Cookies from 'js-cookie';
 function Auth() {
     const navigate = useNavigate();
     const token = Cookies.get('auth_token');
-    console.log({ token });
 
     if (token) {
         // console.log('navi');
