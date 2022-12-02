@@ -220,13 +220,14 @@ function MainChart({ endDate, startDate, deviceUser }) {
                             left: '0',
                             right: '0',
                             textAlign: 'center',
+                            padding: '0 165px',
                         }}>
                         <span style={{ fontSize: '18px', marginBottom: '10px', fontWeight: '600' }}>
                             Vui lòng chờ...
                         </span>{' '}
                         <br />
-                        Trường hợp không hiện thị vì không có dữ liệu <br /> bạn có thể chọn khoảng
-                        thời gian khác
+                        Trường hợp không hiện thị vì không có dữ liệu bạn có thể chọn khoảng thời
+                        gian khác
                     </p>
                 </div>
             )}

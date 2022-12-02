@@ -15,7 +15,7 @@ export default function ControlPanelMap({ data, onSelectCity }) {
     return (
         <div className="pn_wrapper">
             <button className="pn_btn-all" onClick={handleClick}>
-                {!open ? <span>Tất cả trạm trong bản đồ</span> : <span>Đóng lại</span>}
+                {!open ? <span>Tất cả trạm</span> : <span>Đóng</span>}
             </button>
             {open && (
                 <div className="pn_popper">

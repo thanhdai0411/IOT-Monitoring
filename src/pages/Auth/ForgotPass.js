@@ -2,23 +2,35 @@ import React, { useState } from 'react';
 import './Auth.scss';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-
+import Toast from '../../utils/toasts';
+import { sendPasswordResetEmail, getAuth } from 'firebase/auth';
 export default function ForgotPass({ backToLogin }) {
     const [validateEmail, setValidateEmail] = useState(false);
     const [validateEmailPass, setValidateEmailPass] = useState(false);
 
     const [email, setEmail] = useState('');
-
+    const auth = getAuth();
     // handle login equal email
-    const handleLoginEmail = () => {
+    const handleForgotPass = () => {
         if (!email) {
             setValidateEmail(true);
             return;
         }
-    };
 
-    // register
-    const handleRegister = () => {};
+        sendPasswordResetEmail(auth, email)
+            .then(() => {
+                Toast('success', `Vui lòng truy cập email ${email} để đặt lại mật khẩu `);
+                // alert('Vui long kiem tra email cua ban');
+                // Password reset email sent!
+                // ..
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                console.log({ errorCode, errorMessage });
+                // ..
+            });
+    };
 
     // back to login page
     const handleBackLoginPage = () => {
@@ -54,7 +66,7 @@ export default function ForgotPass({ backToLogin }) {
                         variant="contained"
                         size="large"
                         style={{ backgroundColor: '#088f81' }}
-                        onClick={handleLoginEmail}>
+                        onClick={handleForgotPass}>
                         LẤY LẠI MẬT KHẨU
                     </Button>
                 </div>

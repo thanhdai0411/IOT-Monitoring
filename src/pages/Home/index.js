@@ -30,30 +30,27 @@ import AsyncLocalStorage from '../../utils/async_localstorage';
 import { useNavigate } from 'react-router-dom';
 import MyButton from '../../components/MyButton';
 
-// const MainChart = lazy(() => import('../../components/MyChart/MainChart'));
-// const MapD = lazy(() => import('../../components/MapD'));
-
 const TIME_DEVICE_OFF = 30;
 
 function Home() {
     const [dataChange, setDataChange] = useState(false);
     const [valueSelect, setValueSelect] = useState('');
     const [menuValue, setMenuSelect] = useState('');
+    const [cameraList, setCameraList] = useState([]);
 
     const [endDate, setEndDate] = useState(moment(new Date()).format('HH:mm MM/DD/YYYY'));
     const [startDate, setStartDate] = useState(
-        moment(new Date()).subtract(2, 'h').format('HH:mm MM/DD/YYYY')
+        moment(new Date()).subtract(1, 'h').format('HH:mm MM/DD/YYYY')
     );
 
     const [endDateTemp, setEndDateTemp] = useState(moment(new Date()).format('HH:mm MM/DD/YYYY'));
     const [startDateTemp, setStartDateTemp] = useState(
-        moment(new Date()).subtract(2, 'h').format('HH:mm MM/DD/YYYY')
+        moment(new Date()).subtract(1, 'h').format('HH:mm MM/DD/YYYY')
     );
 
     const [inputValue, setInputValue] = useState('');
 
     const navigate = useNavigate();
-    const dispatch = useDispatch();
 
     // handle data chart
     const db = getDatabase();
@@ -69,8 +66,10 @@ function Home() {
 
     let devices = [];
     useEffect(() => {
+        let camera = [];
         if (listDevice) {
             const id = Object.keys(listDevice);
+
             id.map((v) => {
                 devices.push({
                     id: v,
@@ -84,13 +83,16 @@ function Home() {
     useEffect(() => {
         AsyncLocalStorage.getItem('home_station').then((station) => {
             if (station) {
-                setValueSelect(JSON.parse(station));
+                let stationUser = JSON.parse(station);
+                setValueSelect(stationUser);
+                setCameraList(listDevice[stationUser.id]['cameraList']);
             } else {
                 setValueSelect(devices[0]);
+                setCameraList(listDevice[devices[0].id]['cameraList']);
             }
         });
     }, []);
-
+    console.log({ cameraList });
     // get data from firebase
     useEffect(() => {
         if (valueSelect)
@@ -190,6 +192,7 @@ function Home() {
         if (v !== null) {
             AsyncLocalStorage.setItem('home_station', JSON.stringify(v)).then(() => {
                 setValueSelect(v);
+                setCameraList(listDevice[v.id]['cameraList']);
             });
         }
     };
@@ -221,7 +224,7 @@ function Home() {
                         <SubHeader
                             text={
                                 valueSelect
-                                    ? `BẢNG GIÁM SÁT DỮ LIỆU ${valueSelect.label}`
+                                    ? `GIÁM SÁT DỮ LIỆU ${valueSelect.label}`
                                     : 'BẠN HÃY CHỌN TRẠM ĐỂ GIÁM SÁT'
                             }
                         />
