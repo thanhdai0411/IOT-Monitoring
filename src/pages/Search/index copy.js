@@ -118,15 +118,11 @@ function Search() {
     const db = ref(getDatabase());
 
     const handleChangeStartDate = (e) => {
-        setDataSensorRange([]);
-
         const startTime = moment(e.$d).format('HH:mm MM-DD-YYYY');
         setStartDate(startTime);
     };
 
     const handleChangeEndDate = (e) => {
-        setDataSensorRange([]);
-
         const endTime = moment(e.$d).format('HH:mm MM-DD-YYYY');
         setEndDate(endTime);
     };
@@ -192,22 +188,18 @@ function Search() {
             .then((result) => {
                 const dataSensorGet = JSON.parse(result.data);
                 console.log({ dataSensorGet });
-                // setCountGet((countGet) => countGet + 1);
-                let dataSensorRange = {
-                    name: nameSensor,
-                    data: dataSensorGet.Detail,
-                };
+                setCountGet((countGet) => countGet + 1);
+
                 // count.current = count.current + 1;
-                setDataSensorRange((prv) => [...prv, dataSensorRange]);
 
-                // dataSensorGet.Detail.forEach((v) => {
-                //     let obj = {
-                //         value: { name: nameSensor, val: v.avg_value },
-                //         time: v.data_hora.value,
-                //     };
+                dataSensorGet.Detail.forEach((v) => {
+                    let obj = {
+                        value: { name: nameSensor, val: v.avg_value },
+                        time: v.data_hora.value,
+                    };
 
-                //     setDataSensorRange((prv) => [...prv, obj]);
-                // });
+                    setDataSensorRange((prv) => [...prv, obj]);
+                });
             })
             .catch((error) => {
                 const code = error.code;
@@ -219,51 +211,35 @@ function Search() {
                 setCountGet(0);
             });
     };
+
+    // const watchData = () => {
     let output = [];
+    if (countGet === lengSensor.length) {
+        const handleObjectSameKeyInArr = (arr) => {
+            arr.forEach(function (item) {
+                var existing = output.filter(function (v, i) {
+                    return v.time == item.time;
+                });
 
-    const handleObjectSameKeyInArr = (arr) => {
-        arr.forEach(function (item) {
-            var existing = output.filter(function (v, i) {
-                return v.time == item.time;
-            });
-
-            if (existing.length) {
-                var existingIndex = output.indexOf(existing[0]);
-                output[existingIndex].value = output[existingIndex].value.concat(item.value);
-            } else {
-                let arr = [];
-                arr.push(item.value);
-                let type = typeof item.value;
-                if (type == 'object') {
-                    item.value = arr;
+                if (existing.length) {
+                    var existingIndex = output.indexOf(existing[0]);
+                    output[existingIndex].value = output[existingIndex].value.concat(item.value);
+                } else {
+                    let arr = [];
+                    arr.push(item.value);
+                    let type = typeof item.value;
+                    if (type == 'object') {
+                        item.value = arr;
+                    }
+                    // console.log(item);
+                    output.push(item);
                 }
-                // console.log(item);
-                output.push(item);
-            }
-        });
-    };
-    if (dataSensorRange.length === lengSensor.length) {
-        console.log({ dataSensorRange });
-        const dataEnd = [];
-        dataSensorRange.forEach((v) => {
-            let end = [];
-            v.data.map((item) => {
-                let obj = {
-                    value: { name: v.name, val: item.avg_value },
-                    time: item.data_hora.value,
-                };
-                // return obj;
-                dataEnd.push(obj);
             });
-        });
-        console.log({ dataEnd });
-        if (dataEnd && dataEnd.length) {
-            console.log({ dataEnd });
-            handleObjectSameKeyInArr(dataEnd);
-        }
+        };
+        handleObjectSameKeyInArr(dataSensorRange);
+        // };
     }
 
-    // };
     // console.log({ count: countGet, leng: lengSensor });
 
     const mergeItemObjectArrToObject = (arr) => {
@@ -293,19 +269,24 @@ function Search() {
     let endDataForChart = [];
     if (output.length > 0) {
         console.log({ output });
-
-        endDataForChart = mergeItemObjectArrToObject(output);
+        let type = dataSensorRange[0].value[0].length;
+        if (!type) {
+            endDataForChart = mergeItemObjectArrToObject(output);
+        }
     }
 
     if (endDataForChart.length > 0) {
         disableBtnSearch.current = false;
-
         console.log({ endDataForChart });
     }
 
     const handleClickSearch = () => {
         if (!valueSelect) {
             Toast('error', 'Vui lòng chọn trạm để tra cứu', 2000);
+            return;
+        }
+        if (endDataForChart.length > 0) {
+            Toast('warning', 'Dữ liệu đã tìm thấy', 2000);
             return;
         }
 
@@ -404,7 +385,6 @@ function Search() {
         if (v !== null) {
             setValueSelect(v);
             setStationId(v.id);
-            setDataSensorRange([]);
         }
     };
 
@@ -450,13 +430,9 @@ function Search() {
                 Toast('success', 'Xuát dữ liệu thành công', 2000);
             } else {
                 Toast('error', 'Thất bại. Xin vui lòng thử lại sau', 2000);
-                btnExportExcel.current.disabled = false;
-                btnExportExcel.current.innerHTML = 'Xuất dữ liệu ra Excel';
             }
         } catch (err) {
             Toast('error', 'Thất bại. Xin vui lòng thử lại sau', 2000);
-            btnExportExcel.current.disabled = false;
-            btnExportExcel.current.innerHTML = 'Xuất dữ liệu ra Excel';
         }
     };
 
@@ -577,11 +553,7 @@ function Search() {
                                     alignItems: 'center',
                                 }}>
                                 <CircularProgress color="success" />
-                                <div style={{ marginTop: '10px' }}>
-                                    {' '}
-                                    Vui lòng chờ... <br />
-                                    Thời gian càng dài tìm kiếm càng lâu{' '}
-                                </div>
+                                <div style={{ marginTop: '10px' }}> Đang tiến hành tìm kiếm </div>
                             </div>
                         ) : (
                             <span>Chưa có dữ liệu để hiện thị</span>

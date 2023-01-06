@@ -1,3 +1,29 @@
 .search_page {
-    padding : 10px ;
+    padding: 10px;
+}
+
+.btn_export-excel {
+    background-color: rgb(17, 141, 79);
+    margin: 20px;
+    text-decoration: none;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 6px;
+    box-shadow: rgb(27, 142, 81) 2px 3px 4px 0px;
+    margin: 20px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer ;
+}
+
+.btn_export-excel:hover {
+    background-color: rgb(59, 190, 124);
+    cursor: pointer;
+}
+
+.btn_export-excel:disabled,
+.btn_export-excel[disabled] {
+    border: 1px solid #999999;
+    background-color: #cccccc;
+    color: #666666;
 }

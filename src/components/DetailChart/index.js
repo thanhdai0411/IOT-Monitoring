@@ -70,6 +70,7 @@ function DetailChart() {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
+                        cursor: 'pointer',
                     }}>
                     <ArrowBackIosIcon onClick={handleGoBack} />
                     <p className="detail_chart">BIỂU ĐỒ DỮ LIỆU {station}</p>

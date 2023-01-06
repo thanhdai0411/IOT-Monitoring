@@ -6,6 +6,7 @@ import GoogleIcon from '@mui/icons-material/Google';
 import LocalPhoneRoundedIcon from '@mui/icons-material/LocalPhoneRounded';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+import axios from 'axios';
 import {
     getAuth,
     GoogleAuthProvider,
@@ -59,8 +60,12 @@ export default function Login() {
     const getDeviceUser = (author, accessToken) => {
         author.getIdToken().then((data) => {
             const token = `Bearer ${data}`;
+            console.log({ token });
             // let a = getDeviceUser(token);
             Toast('info', 'Vui lòng chờ... Đang chuyển hướng!');
+            // excel
+
+            // call device
             fetch(
                 'https://asia-east2-weatherstationiotdaiviet.cloudfunctions.net/HttpPostRequest/api/getListDevices',
                 {
